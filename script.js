@@ -21,6 +21,10 @@ function clearDisplay() {
   operator = null;
 }
 
+function isNumericChar(c) {
+  return c >= '0' && c <= '9';
+}
+
 function calculate() {
   let secondOperand = parseFloat(display.value);
   let result;
@@ -66,12 +70,16 @@ buttons.forEach(button => {
     } else if (button.classList.contains("toggleSignBtn")) {
       if (display.value[0] === "-") {
         display.value = display.value.slice(1);
-      } else {
+      }else if(isNumericChar(display.value[0])){
         display.value = "-" + display.value;
       }
       input = display.value;
     } else if (button.classList.contains("PercentageBtn")) {
-      display.value = (parseFloat(display.value) / 100).toString();
+      let PercentageResult = (parseFloat(display.value) / 100).toString();
+      if(isNaN(PercentageResult)){
+        PercentageResult = "Error";
+      }
+      display.value = PercentageResult;
       input = display.value;
     }else if(button.classList.contains("SubtractionBtn")&&firstOperand == null&&display.value ==""){
       appendToDisplay("-")
