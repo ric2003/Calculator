@@ -40,6 +40,10 @@ function calculate() {
     default:
       return;
   }
+  if (isNaN(result) || result === Number.POSITIVE_INFINITY || result === Number.NEGATIVE_INFINITY) {
+    result = "Error";
+  }
+ 
   display.value = result;
   input = result.toString();
   firstOperand = result;
@@ -54,7 +58,11 @@ buttons.forEach(button => {
     } else if (button.classList.contains("numBtn") || button.classList.contains("zeroBtn")) {
       appendToDisplay(value);
     } else if (button.classList.contains("DecimalPointBtn") && !display.value.includes(".")) {
-      appendToDisplay(value);
+      if(display.value==""||display.value=="-"){
+        appendToDisplay("0" + value);
+      }else{
+        appendToDisplay(value);
+      } 
     } else if (button.classList.contains("toggleSignBtn")) {
       if (display.value[0] === "-") {
         display.value = display.value.slice(1);
@@ -65,6 +73,8 @@ buttons.forEach(button => {
     } else if (button.classList.contains("PercentageBtn")) {
       display.value = (parseFloat(display.value) / 100).toString();
       input = display.value;
+    }else if(button.classList.contains("SubtractionBtn")&&firstOperand == null&&display.value ==""){
+      appendToDisplay("-")
     } else if (button.classList.contains("additionBtn") || button.classList.contains("SubtractionBtn") || button.classList.contains("MultiplicationBtn") || button.classList.contains("DivisionBtn")) {
       if (firstOperand !== null && operator !== null && !shouldResetDisplay) {
         calculate();
@@ -74,7 +84,11 @@ buttons.forEach(button => {
       operator = value;
       shouldResetDisplay = true;
     } else if (button.classList.contains("equalsBtn")) {
-      calculate();
+      if (firstOperand !== null && operator !== null && !shouldResetDisplay) {
+        calculate();
+      }else{
+        display.value = "Error";
+      }
     }
   });
 });
